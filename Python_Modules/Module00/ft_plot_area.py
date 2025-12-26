@@ -4,8 +4,4 @@ def ft_plot_area():
     print(int(length) * int(width))
 
 
-ft_plot_area()
-
-
-
-
+#ft_plot_area()
