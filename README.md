@@ -1,5 +1,7 @@
 # Python-Diverse
 
+![python](assets/python_image.jpg)
+
 This repo is going to be composed of different small projects in Python 3.    
 
 ### Python_Modules   
