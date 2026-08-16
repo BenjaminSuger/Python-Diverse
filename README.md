@@ -12,3 +12,4 @@ This project is a "piscine" (= series of exercises split in different modules wi
 
 Random exercice I found online :    
 * gnome_sort => apply a sort of gnome_sort on a list of strings
+* nesting_parenthesis => common stack use through list to solve nesting parenthesis
