@@ -10,6 +10,7 @@ This project is a "piscine" (= series of exercises split in different modules wi
 
 ### Random
 
-Random exercice I found online :    
+Random exercice I found online (absolutly not related to 42 ;):    
 * gnome_sort => apply a sort of gnome_sort on a list of strings
 * nesting_parenthesis => common stack use through list to solve nesting parenthesis
+* palindrome_basic => basic palindrome like
