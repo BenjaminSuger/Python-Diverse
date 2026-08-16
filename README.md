@@ -14,3 +14,4 @@ Random exercice I found online (absolutly not related to 42 ;):
 * gnome_sort => apply a sort of gnome_sort on a list of strings
 * nesting_parenthesis => common stack use through list to solve nesting parenthesis
 * palindrome_basic => basic palindrome like
+* shared_letters => should print in order and only once the shared letter from 2 str
