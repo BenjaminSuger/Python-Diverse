@@ -16,3 +16,5 @@ Random exercice I found online (absolutly not related to 42 ;):
 * palindrome_basic => basic palindrome like
 * shared_letters => should print in order and only once the shared letter from 2 str
 * mirrors => mirrors of a list
+* secret => find if the character of the first string are present in order in the second string 
+* letter_stew => find if two strings get the same letter (different orders)
