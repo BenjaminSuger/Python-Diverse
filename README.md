@@ -15,3 +15,4 @@ Random exercice I found online (absolutly not related to 42 ;):
 * nesting_parenthesis => common stack use through list to solve nesting parenthesis
 * palindrome_basic => basic palindrome like
 * shared_letters => should print in order and only once the shared letter from 2 str
+* mirrors => mirrors of a list
