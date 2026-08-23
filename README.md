@@ -7,6 +7,8 @@ This repo is going to be composed of different small projects in Python 3.
 ### Python_Modules   
 This project is a "piscine" (= series of exercises split in different modules with an increasing difficulty, and new concepts every module and exercise) to explore Python as much as possible.
 
+### Python_Piscine
+This is the original python piscine (=series of exercises) at 42. Soon to be depreciated. The aim of the modules where to introduce basic language features of python for data science / AI projects in the future.
 
 ### Random
 
