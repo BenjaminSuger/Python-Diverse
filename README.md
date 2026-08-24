@@ -20,3 +20,4 @@ Random exercice I found online (absolutly not related to 42 ;):
 * mirrors => mirrors of a list
 * secret => find if the character of the first string are present in order in the second string 
 * letter_stew => find if two strings get the same letter (different orders)
+* staircase => count every step of 1
