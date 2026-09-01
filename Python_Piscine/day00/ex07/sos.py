@@ -2,6 +2,7 @@ from sys import argv
 
 
 def convert_morse(sentence: str) -> str:
+    """convert text to international morse code"""
     NESTED_MORSE = {" ": "/ ", "A": ".- ", "B": " -... ", "C": "-.-. ",
                     "E": ". ", "F": "..-. ", "G": "--. ", "H": ".... ",
                     "I": ".. ", "J": ".--- ", "K": "-.- ", "L": ".-.. ",
