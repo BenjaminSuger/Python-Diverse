@@ -2,12 +2,14 @@ from sys import argv
 
 
 def is_valid(value: str) -> bool:
+    """check the validity of the string"""
     if value[0] == '-' or value[0] == '+':
         return value[1:].isnumeric()
     return value.isnumeric()
 
 
 def main():
+    """main function allowing to check the args"""
     try:
         if len(argv) > 2:
             raise AssertionError("more than one argument is provided")
