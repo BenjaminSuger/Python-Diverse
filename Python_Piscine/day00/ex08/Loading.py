@@ -10,8 +10,14 @@ def ft_tqdm(lst: range) -> None:
         n += 1
         percentage = n * 100 // total
         elapsed = times().elapsed - start
-        rate = n / elapsed if elapsed > 0 else 0
-        remaining = (total - n) / rate if rate > 0 else 0
+        if elapsed > 0:
+            rate = n / elapsed
+        else:
+            rate = 0
+        if rate > 0:
+            remaining = (total - n) / rate
+        else:
+            remaining = 0
         left = f"\r{percentage:>3}%|"
         right = (f"| {n}/{total} "
                  f"[{int(elapsed) // 60:02d}:{int(elapsed):02d}"
