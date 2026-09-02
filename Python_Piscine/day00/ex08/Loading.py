@@ -1,20 +1,24 @@
-import os # temporaire 
-import time
+from os import times, get_terminal_size
+
 
 def ft_tqdm(lst: range) -> None:
-    pass
-
-
-if __name__ == "__main__":
-    for percentage in range(0, 101):
+    """replicate tqdm function as a generator"""
+    n = 0
+    total = len(lst)
+    start = times().elapsed
+    for i in lst:
+        n += 1
+        percentage = n * 100 // total
+        elapsed = times().elapsed - start
+        rate = n / elapsed if elapsed > 0 else 0
+        remaining = (total - n) / rate if rate > 0 else 0
         left = f"\r{percentage:>3}%|"
-        right =  "| 333/333 [00:01<00:00, 177.76it/s]"
-        #f"| {n}/{total} [{elapsed}<{remaining}, {rate}it/s]"
-        columns = os.get_terminal_size().columns - len(left) - len(right)
-        #percentage =  
-        middle = columns * '██'  #int(columns * percentage / 100) * '██'
-        print("\r" + left + middle + right, end='', flush=True)
-        time.sleep(0.05)
-    
-
-    
+        right = (f"| {n}/{total} "
+                 f"[{int(elapsed) // 60:02d}:{int(elapsed):02d}"
+                 f"<{int(remaining) // 60:02d}:{int(remaining):02d}, "
+                 f"{rate:.2f}it/s]")
+        columns = get_terminal_size().columns - len(left) - len(right)
+        middle_square = int(columns * n / total) * '█'
+        middle_empty = (columns - len(middle_square)) * ' '
+        print(left + middle_square + middle_empty + right, end='', flush=True)
+        yield i
