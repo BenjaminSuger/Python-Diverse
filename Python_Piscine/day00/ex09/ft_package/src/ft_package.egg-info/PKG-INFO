@@ -1,0 +1,14 @@
+Metadata-Version: 2.4
+Name: ft_package
+Version: 0.0.1
+Summary: A sample test package for piscine python
+Author-email: bsuger <bsuger@student.42.fr>
+License-Expression: MIT
+Project-URL: Homepage, https://github.com/BenjaminSuger/Python-Diverse
+Classifier: Programming Language :: Python :: 3
+Requires-Python: >=3.10
+Description-Content-Type: text/markdown
+License-File: LICENSE
+Dynamic: license-file
+
+Python package from bsuger realized during the Python Piscine day 00

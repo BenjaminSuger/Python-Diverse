@@ -16,7 +16,7 @@ classifiers = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/<ton-user>/Python-Diverse
+Homepage = "https://github.com/BenjaminSuger/Python-Diverse"
 
 [tool.setuptools.packages.find]
 where = ["src"]
