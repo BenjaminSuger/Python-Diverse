@@ -1,30 +1,43 @@
-from numpy import multiply
+from numpy import divide, power
 
 
 def check_input(input: list[int | float]) -> bool:
     """check the input needs to be a list and int or float"""
     if not isinstance(input, list):
         return False
-    breakpoint()
+    if not input:
+        return False
     for i in input:
-        if not isinstance(i, float) and not isinstance(i, int):
+        if not isinstance(i, (int, float)):
+            return False
+        if i <= 0:
             return False
     return True
 
 
-def give_bmi(height: list[int | float], weight: list[int | float]) -> list[int | float]:
-    """give the bmi with multiplication from numpy"""
-    #check if the input is good
-    
-
-
-
+def give_bmi(height: list[int | float],
+             weight: list[int | float]) -> list[int | float]:
+    """give the bmi from 2 lists with numpy divide and power
+    BMI formula weight / height^2 """
+    if not check_input(height) or not check_input(weight):
+        raise AssertionError("give_bmi ; Input not valid")
+    if len(height) != len(weight):
+        raise AssertionError("give_bmi ; Input not valid")
+    return divide(weight, power(height, 2)).tolist()
 
 
 def apply_limit(bmi: list[int | float], limit: int) -> list[bool]:
     """for each element in bmi check the limit"""
-    #il faut bien maitriser les histoire de comparaison int avec float pour etre sur comment ca marche (parce que 2 = 1.99999) donc la il y a un gros piege 
-    pass
+    if not check_input(bmi) or not isinstance(limit, int):
+        raise AssertionError("Apply_limit ; input not valid")
+    return [True if x > limit else False for x in bmi]
+
 
 if __name__ == "__main__":
-    print(check_input([3,4,5,6.0, 'a']))
+    try:
+        result = give_bmi([4.0, 21.0, 6.6666], [4.0, 5, 9.2])
+        result_apply = apply_limit(result, 15)
+        print(f"Give BMI ; {result}")
+        print(f"Apply limit; {result_apply}")
+    except AssertionError as e:
+        print(f"{type(e).__name__} {e}")

@@ -7,5 +7,5 @@ try:
     bmi = give_bmi(height, weight)
     print(bmi, type(bmi))
     print(apply_limit(bmi, 26))
-except ValueError as e:
-    print(f"{type(e).__name__} : {e}")
+except AssertionError as e:
+    print(f"AssertionError : {e}")
