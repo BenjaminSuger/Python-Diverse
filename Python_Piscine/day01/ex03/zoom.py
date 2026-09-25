@@ -30,6 +30,7 @@ def ft_zoom(path: str) -> list:
 
 
 def main():
+    """main tester ft_zoom"""
     try:
         ft_zoom("./images/animal.jpeg")
     except Exception as e:
