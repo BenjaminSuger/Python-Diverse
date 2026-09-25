@@ -28,6 +28,7 @@ is true. If function is None, return the items that are true."""
 
 
 def main():
+    """main tester ft_filter()"""
     print(ft_filter.__doc__)
     list1 = [1, 2, 3, 4, 1, 3, 0]
     test = ft_filter(lambda x: x < 3, list1)

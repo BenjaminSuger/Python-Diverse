@@ -19,6 +19,7 @@ def convert_morse(sentence: str) -> str:
 
 
 def main():
+    """main tester convert_morse()"""
     try:
         if len(argv) != 2:
             raise AssertionError("the arguments are bad")

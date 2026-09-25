@@ -9,6 +9,7 @@ def filterstring(string: str, length: int) -> list[str]:
 
 
 def main():
+    """main tester filterstring()"""
     try:
         if len(argv) != 3:
             raise AssertionError
