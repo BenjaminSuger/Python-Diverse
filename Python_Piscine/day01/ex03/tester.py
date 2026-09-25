@@ -1,8 +1,12 @@
-from load_image import ft_load
-#je sais pas si j'aurais tant besoin de ce fichier peut etre laisser load_image.py
+from zoom import ft_zoom
+
 
 def main() -> None:
-    """main tester"""
+    """main tester ft_zoom"""
+    try:
+        ft_zoom("./images/animal.jpeg")
+    except Exception as e:
+        print(f"{type(e).__name__} : {e}")
 
 
 if __name__ == "__main__":
