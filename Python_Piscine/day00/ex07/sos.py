@@ -18,7 +18,7 @@ def convert_morse(sentence: str) -> str:
     return ''.join(result)
 
 
-if __name__ == "__main__":
+def main():
     try:
         if len(argv) != 2:
             raise AssertionError("the arguments are bad")
@@ -28,3 +28,7 @@ if __name__ == "__main__":
         print(convert_morse(argv[1]))
     except AssertionError as e:
         print(f"AssertionError: {e}")
+
+
+if __name__ == "__main__":
+    main()

@@ -8,7 +8,7 @@ def filterstring(string: str, length: int) -> list[str]:
     return result
 
 
-if __name__ == "__main__":
+def main():
     try:
         if len(argv) != 3:
             raise AssertionError
@@ -22,3 +22,7 @@ if __name__ == "__main__":
         print(result)
     except (AssertionError, ValueError):
         print("AssertionError: the arguments are bad")
+
+
+if __name__ == "__main__":
+    main()

@@ -27,7 +27,7 @@ is true. If function is None, return the items that are true."""
     return [x for x in iterable if f(x)]
 
 
-if __name__ == "__main__":
+def main():
     print(ft_filter.__doc__)
     list1 = [1, 2, 3, 4, 1, 3, 0]
     test = ft_filter(lambda x: x < 3, list1)
@@ -36,3 +36,7 @@ if __name__ == "__main__":
     test2 = ft_filter(None, list1)
     for i in test2:
         print(i)
+
+
+if __name__ == "__main__":
+    main()
