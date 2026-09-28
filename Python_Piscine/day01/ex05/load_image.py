@@ -9,6 +9,7 @@ def ft_load(path: str) -> list:
         raise TypeError("Image is not a JPEG or JPG")
     result = asarray(img)
     print(f"The shape of image is : {result.shape}")
+    print(result)
     return result
 
 
