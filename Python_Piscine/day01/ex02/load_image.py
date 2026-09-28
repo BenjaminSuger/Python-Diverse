@@ -12,8 +12,12 @@ def ft_load(path: str) -> list:
     return result
 
 
-if __name__ == "__main__":
+def main() -> None:
     try:
         print(ft_load("./images/landscape.jpg"))
     except Exception as e:
         print(f"{type(e).__name__} : {e}")
+
+
+if __name__ == "__main__":
+    main()

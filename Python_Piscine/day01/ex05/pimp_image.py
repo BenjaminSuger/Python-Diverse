@@ -52,7 +52,7 @@ def ft_grey(array) -> list:
     show_img(new_array)
 
 
-def main():
+def main() -> None:
     try:
         array = ft_load("./images/landscape.jpg")
         ft_invert(array)
