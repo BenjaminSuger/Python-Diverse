@@ -3,6 +3,7 @@ from matplotlib.pyplot import imshow, show, close, gcf
 
 
 def close_figure(event):
+    """function to close the image with the q key"""
     if event.key == 'q':
         close(event.canvas.figure)
 
