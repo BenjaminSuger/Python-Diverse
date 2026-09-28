@@ -2,6 +2,7 @@ from load_csv import load
 
 
 def main():
+    """main tester"""
     try:
         print(load("./data/life_expectancy_years.csv"))
     except Exception as e:
