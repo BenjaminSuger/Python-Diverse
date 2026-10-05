@@ -1,5 +1,5 @@
 from load_csv import load
-from matplotlib.pyplot import show, step
+from matplotlib.pyplot import show
 
 
 def viz_life_expectancy(country: str) -> None:
@@ -18,6 +18,7 @@ def main():
         viz_life_expectancy('France')
     except Exception as e:
         print(f"{type(e).__name__}: {e}")
+
 
 if __name__ == "__main__":
     main()
