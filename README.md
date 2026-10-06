@@ -22,3 +22,4 @@ Random exercice I found online (absolutly not related to 42 ;):
 * secret => find if the character of the first string are present in order in the second string 
 * letter_stew => find if two strings get the same letter (different orders)
 * staircase => count every step of 1
+* convert_base => convert a string representation from a base to another
