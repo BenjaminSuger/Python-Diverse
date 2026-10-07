@@ -5,11 +5,11 @@ from matplotlib.pyplot import show
 def viz_life_expectancy(country: str) -> None:
     data = load("./data/life_expectancy_years.csv")
     if data.empty:
-        print(f"No data loaded")
+        print("No data loaded")
         return
     graph = data[data['country'] == country].iloc[0].drop('country')
     country = country + " Life expectancy Projections"
-    ax = graph.plot(title=country, xlabel="Years", ylabel="Life expectancy")
+    graph.plot(title=country, xlabel="Years", ylabel="Life expectancy")
     show()
 
 
