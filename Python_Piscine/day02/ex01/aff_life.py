@@ -3,13 +3,18 @@ from matplotlib.pyplot import show
 
 
 def viz_life_expectancy(country: str) -> None:
+    """visualization of life expectancy of a country"""
     data = load("./data/life_expectancy_years.csv")
     if data.empty:
         print("No data loaded")
         return
-    graph = data[data['country'] == country].iloc[0].drop('country')
-    country = country + " Life expectancy Projections"
-    graph.plot(title=country, xlabel="Years", ylabel="Life expectancy")
+    try:
+        graph = data.set_index("country").loc[country]
+    except Exception:
+        print(f"no data for {country}")
+        return
+    graph.plot(title=f"{country} Life expectancy Projections",
+               xlabel="Year", ylabel="Life expectancy")
     show()
 
 
