@@ -1,5 +1,6 @@
 from load_csv import load
-from matplotlib.pyplot import show, title, ylabel, xlabel, FuncFormatter, MultipleLocator
+from matplotlib.pyplot import (show, title, ylabel, xlabel,
+                               FuncFormatter, MultipleLocator)
 
 
 def parse(v) -> float:
@@ -18,27 +19,24 @@ def viz_population_total(country1: str, country2: str) -> None:
         return
     try:
         countries = [country1, country2]
-        new_df = (data.set_index('country').loc[countries].T.map(parse))
+        new_df = data.set_index('country').loc[countries].T.map(parse)
+        new_df.index = new_df.index.astype(int)
     except Exception:
-        print(f"No data for one or two countries: {country1} {country2}")
+        print("Errors in data")
         return
-    print(new_df) #temp
-    new_df.index = new_df.index.astype(int) # sujet aussi a des exceptions
     new_df = new_df.loc[1800:2050]
-    ax = new_df.plot(color = {country1: "blue", country2 : "green"})
-    ax.yaxis.set_major_locator(MultipleLocator(20e6)) #20M par 20M
+    ax = new_df.plot(color={country1: "blue", country2: "green"})
     ax.yaxis.set_major_formatter(FuncFormatter(lambda y, _: f"{y / 1e6:.0f}M"))
-
+    ax.yaxis.set_major_locator(MultipleLocator(20e6))
     ax.legend(loc="lower right")
-
     title("Population Projections")
     ylabel("Population")
     xlabel("Years")
     show()
 
 
-
 def main():
+    """main tester required"""
     try:
         viz_population_total('France', 'Belgium')
     except Exception as e:
