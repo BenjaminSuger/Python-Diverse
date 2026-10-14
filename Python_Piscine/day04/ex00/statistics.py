@@ -1,4 +1,5 @@
 def mean(args) -> None:
+    """mean"""
     if not args:
         print("ERROR")
         return
@@ -6,6 +7,7 @@ def mean(args) -> None:
 
 
 def median(args) -> None:
+    """median"""
     if not args:
         print("ERROR")
         return
@@ -20,6 +22,7 @@ def median(args) -> None:
 
 
 def std(args) -> None:
+    """std"""
     if not args:
         print("ERROR")
         return
@@ -29,6 +32,7 @@ def std(args) -> None:
 
 
 def var(args) -> None:
+    """variance"""
     if not args:
         print("ERROR")
         return
@@ -38,6 +42,7 @@ def var(args) -> None:
 
 
 def quartile(args) -> None:
+    """quartile 25% and 75%"""
     if not args:
         print("ERROR")
         return
