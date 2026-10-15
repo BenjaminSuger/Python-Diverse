@@ -10,6 +10,10 @@ This project is a "piscine" (= series of exercises split in different modules wi
 ### Python_Piscine
 This is the original python piscine (=series of exercises) at 42. Soon to be depreciated. The aim of the modules where to introduce basic language features of python for data science / AI projects in the future.
 
+### Arachnida
+From a cybersecurity project; a program allowing to downloads the following images format ; '.jpg/jpeg /  .png / .gif / .bmp'
+Can be use to download recursively downloads the images from the URL given
+
 ### Random
 
 Random exercice I found online (absolutly not related to 42 ;):    
