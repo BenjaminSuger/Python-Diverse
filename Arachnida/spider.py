@@ -1,7 +1,17 @@
 #!/bin/python3
 
 import argparse
+import os
+import requests
+from bs4 import BeautifulSoup
+from urllib.parse import urlparse, urljoin
 
+'''
+https://example.com/ => sans image a trouve
+https://books.toscrape.com/ => plein d'images
+https://www.scrapethissite.com/ => pas tant d'images mais au moins des liens un peu
+https://realpython.github.io/fake-jobs/ => un cas un peu complexe je trouve sur les images peut etre
+'''
 
 class Spider:
 
@@ -10,10 +20,50 @@ class Spider:
         self.depth = depth
         self.path = path
         self.url = url
-        # queue peut etre a voir mais je pense ca va etre fait au fur et a mesure
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"r: {self.recursion}\ndepth: {self.depth}\npath: {self.path}\nurl: {self.url}"
+   
+    def crawl(self, origin: str) -> None:
+        """crawl with the right level of depth"""
+        visited = [] # peut etre des () pour le level of depth
+        to_visit = []
+        # on call simple dans une boucle qui remplit les to_visit
+        pass
+
+
+    def simple(self, link: str) -> list[str]:
+        """get the images in the following format ;
+        .jpg/ .jpeg /  .png / .gif / .bmp
+        return a list of linked for further depth level"""
+        html = requests.get(link)
+        soup = BeautifulSoup(html.content, 'html.parser')
+        images = soup.find_all('img')
+        for i in images:
+            print(urljoin(link, i['src']))
+            
+
+
+    def hunt(self) -> None:
+        """spider hunt download the data"""
+        # d'abord on cree le dossier et check que c'est possible autre erreur a gerer plus tard sur les images et les mettres au bon endroit
+        try:
+            os.mkdir(self.path)
+        except FileExistsError:
+            #print(f"{self.path} already existing, re using this")
+            pass
+        except Exception as e:
+            print(f"{type(e).__name__}: {e}")
+            print("Spider killed")
+            return
+        #ensuite on va faire simple() deja pour une page mais sinon on devait faire crawl() qui va gerer
+        result = self.simple(self.url) 
+
+
+
+
+
+
 
 
 def parsing_args() -> Spider:
@@ -34,7 +84,7 @@ def parsing_args() -> Spider:
 def spider() -> None:
     """Spider will check arguments and launch an instance of spider"""
     spider = parsing_args()
-    print(spider)
+    spider.hunt()
 
 
 if __name__ == "__main__":
