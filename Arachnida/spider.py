@@ -58,12 +58,30 @@ class Spider:
                 result.append((url, depth))
         return result
 
-    def crawl(self, origin: str) -> None:
+    def crawl(self) -> None:
         """crawl with the right level of depth"""
-        visited = [] # une liste de tuple pour les level
-        to_visit = []
-        # on call simple dans une boucle qui remplit les to_visit
-        pass
+        actual_depth = 0
+        visited = [] 
+        to_visit = [(self.__url, actual_depth)]
+        while to_visit:
+            actual = to_visit.pop(0)
+            print(actual)
+            new_links = self.simple(actual[0], actual[1])
+            #surement a exporter dans une fonction pour les check
+            #surement a modifier pour un truc plus rapide a voir
+            #ca me coutera moins cher de faire une liste a part que j'augmente au fur et mesire
+            #aussi un truc a voir c'est qu'il peut y avoir des liens pas lie il y a pas de checkdessus a faire surement avec urlparse soit ici soit dans simple
+            #un des exemples c'est https://www.scrapethissite.com/ sur un -r -l 3
+            for i in new_links:
+                if i[1] >= self.__depth:
+                    continue
+                if i in [x[0] for x in visited]:
+                    continue
+                if i in [x[0] for x in to_visit]:
+                    continue
+                to_visit.append(i)
+
+
 
 
     def simple(self, link: str, depth: int) -> list[str]:
@@ -84,10 +102,7 @@ class Spider:
             print(f"{type(e).__name__}: {e}")
             print("Spider killed")
             return
-        #temporaire c'est juste un simple
-        result = self.simple(self.__url, 0) 
-        print(result)
-
+        self.crawl()
 
 
 
