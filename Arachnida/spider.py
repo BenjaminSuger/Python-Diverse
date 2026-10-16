@@ -16,13 +16,14 @@ https://realpython.github.io/fake-jobs/ => un cas un peu complexe je trouve sur 
 class Spider:
 
     def __init__(self, url: str, recursion: bool = False, depth: int = 5, path: str = "."):
-        self.recursion = recursion
-        self.depth = depth
-        self.path = path
-        self.url = url
+        self.__recursion = recursion
+        self.__depth = depth
+        self.__path = path
+        self.__url = url
+        self.__extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
 
     def __repr__(self) -> str:
-        return f"r: {self.recursion}\ndepth: {self.depth}\npath: {self.path}\nurl: {self.url}"
+        return f"r: {self.__recursion}\ndepth: {self.__depth}\npath: {self.__path}\nurl: {self.__url}"
    
     def crawl(self, origin: str) -> None:
         """crawl with the right level of depth"""
@@ -40,24 +41,30 @@ class Spider:
         soup = BeautifulSoup(html.content, 'html.parser')
         images = soup.find_all('img')
         for i in images:
-            print(urljoin(link, i['src']))
+            path = urlparse(i['src']).path
+            ext = os.path.splitext(path)[1].lower()
+            if ext in self.__extensions:
+                url = urljoin(link, i['src'])
+                img_data = requests.get(url).content
+                name = os.path.basename(urlparse(url).path)
+                print(f"file {name} downloaded")
+                with open(self.__path + name, 'wb') as handler:
+                    handler.write(img_data)
             
 
 
     def hunt(self) -> None:
         """spider hunt download the data"""
-        # d'abord on cree le dossier et check que c'est possible autre erreur a gerer plus tard sur les images et les mettres au bon endroit
         try:
-            os.mkdir(self.path)
+            os.mkdir(self.__path)
         except FileExistsError:
-            #print(f"{self.path} already existing, re using this")
             pass
         except Exception as e:
             print(f"{type(e).__name__}: {e}")
             print("Spider killed")
             return
         #ensuite on va faire simple() deja pour une page mais sinon on devait faire crawl() qui va gerer
-        result = self.simple(self.url) 
+        result = self.simple(self.__url) 
 
 
 
