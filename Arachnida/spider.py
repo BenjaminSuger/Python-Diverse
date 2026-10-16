@@ -22,9 +22,24 @@ class Spider:
         self.__url = url
         self.__extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
 
+
     def __repr__(self) -> str:
         return f"r: {self.__recursion}\ndepth: {self.__depth}\npath: {self.__path}\nurl: {self.__url}"
    
+
+    def __download_images(self, soup: bs4.BeautifulSoup, link: str) -> None:
+        for i in soup.find_all('img'):
+            path = urlparse(i['src']).path
+            ext = os.path.splitext(path)[1].lower()
+            if ext in self.__extensions:
+                url = urljoin(link, i['src'])
+                img_data = requests.get(url).content
+                name = os.path.basename(urlparse(url).path)
+                print(f"file {name} downloaded")
+                with open(self.__path + name, 'wb') as handler:
+                    handler.write(img_data)
+
+
     def crawl(self, origin: str) -> None:
         """crawl with the right level of depth"""
         visited = [] # peut etre des () pour le level of depth
@@ -36,21 +51,12 @@ class Spider:
     def simple(self, link: str) -> list[str]:
         """get the images in the following format ;
         .jpg/ .jpeg /  .png / .gif / .bmp
-        return a list of linked for further depth level"""
+        return a list of links for further depth level"""
         html = requests.get(link)
         soup = BeautifulSoup(html.content, 'html.parser')
-        images = soup.find_all('img')
-        for i in images:
-            path = urlparse(i['src']).path
-            ext = os.path.splitext(path)[1].lower()
-            if ext in self.__extensions:
-                url = urljoin(link, i['src'])
-                img_data = requests.get(url).content
-                name = os.path.basename(urlparse(url).path)
-                print(f"file {name} downloaded")
-                with open(self.__path + name, 'wb') as handler:
-                    handler.write(img_data)
-            
+        self.__download_images(soup, link)
+        #for i in soup.find_all("a", href=True):
+        #    print(i['href'])
 
 
     def hunt(self) -> None:
