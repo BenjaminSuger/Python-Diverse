@@ -55,23 +55,21 @@ class Spider:
         html = requests.get(link)
         soup = BeautifulSoup(html.content, 'html.parser')
         self.__download_images(soup, link)
-        #for i in soup.find_all("a", href=True):
-        #    print(i['href'])
+        # maintenant ca va etre le return des links
+        for i in soup.find_all("a", href=True):
+            print(i['href'])
 
 
     def hunt(self) -> None:
         """spider hunt download the data"""
         try:
-            os.mkdir(self.__path)
-        except FileExistsError:
-            pass
+            os.makedirs(self.__path, exist_ok=True)
         except Exception as e:
             print(f"{type(e).__name__}: {e}")
             print("Spider killed")
             return
-        #ensuite on va faire simple() deja pour une page mais sinon on devait faire crawl() qui va gerer
+        #temporaire c'est juste un simple
         result = self.simple(self.__url) 
-
 
 
 
