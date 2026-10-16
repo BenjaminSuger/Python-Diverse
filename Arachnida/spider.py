@@ -4,13 +4,14 @@ import argparse
 import os
 import requests
 from bs4 import BeautifulSoup
-from urllib.parse import urlparse, urljoin
+from urllib.parse import urlparse, urljoin, urldefrag
 
 '''
 https://example.com/ => sans image a trouve
 https://books.toscrape.com/ => plein d'images
 https://www.scrapethissite.com/ => pas tant d'images mais au moins des liens un peu
 https://realpython.github.io/fake-jobs/ => un cas un peu complexe je trouve sur les images peut etre
+https://quotes.toscrape.com/
 '''
 
 class Spider:
@@ -28,6 +29,8 @@ class Spider:
    
 
     def __download_images(self, soup: bs4.BeautifulSoup, link: str) -> None:
+        """download images from html source with 'img' balise
+        download it to the self.__path given to the program or default './data/'"""
         for i in soup.find_all('img'):
             path = urlparse(i['src']).path
             ext = os.path.splitext(path)[1].lower()
@@ -40,24 +43,37 @@ class Spider:
                     handler.write(img_data)
 
 
+    def __find_links(self, soup: bs4.BeautifulSoup, link: str, depth: int) -> list[tuple(str, int)]:
+        """find links with "a" balise and href, return a list of tuple (link, depth level)
+        no duplicate and do not include the starting link"""
+        result = []
+        for i in soup.find_all("a", href=True):
+            href = i["href"]
+            if href.startswith(("mailto:", "javascript:", "tel:", "#")):
+                continue
+            url, _ = urldefrag(urljoin(link, href))
+            if url == link:
+                continue
+            if not (url, depth) in result:
+                result.append((url, depth))
+        return result
+
     def crawl(self, origin: str) -> None:
         """crawl with the right level of depth"""
-        visited = [] # peut etre des () pour le level of depth
+        visited = [] # une liste de tuple pour les level
         to_visit = []
         # on call simple dans une boucle qui remplit les to_visit
         pass
 
 
-    def simple(self, link: str) -> list[str]:
+    def simple(self, link: str, depth: int) -> list[str]:
         """get the images in the following format ;
         .jpg/ .jpeg /  .png / .gif / .bmp
         return a list of links for further depth level"""
         html = requests.get(link)
         soup = BeautifulSoup(html.content, 'html.parser')
-        self.__download_images(soup, link)
-        # maintenant ca va etre le return des links
-        for i in soup.find_all("a", href=True):
-            print(i['href'])
+        #self.__download_images(soup, link) # temporairement mis en comm
+        return self.__find_links(soup, link, depth + 1)
 
 
     def hunt(self) -> None:
@@ -69,7 +85,8 @@ class Spider:
             print("Spider killed")
             return
         #temporaire c'est juste un simple
-        result = self.simple(self.__url) 
+        result = self.simple(self.__url, 0) 
+        print(result)
 
 
 
@@ -92,7 +109,7 @@ def parsing_args() -> Spider:
     return Spider(values.url, values.r, values.l, values.p)
 
 
-def spider() -> None:
+def main() -> None:
     """Spider will check arguments and launch an instance of spider"""
     spider = parsing_args()
     spider.hunt()
@@ -100,6 +117,6 @@ def spider() -> None:
 
 if __name__ == "__main__":
     try:
-        spider()
+        main()
     except Exception as e:
         print(f"{type(e).__name__}: {e}")
