@@ -18,7 +18,7 @@ class Spider:
 
     def __init__(self, url: str, recursion: bool = False, depth: int = 5, path: str = "."):
         self.__recursion = recursion
-        self.__depth = depth
+        self.__depth = depth if recursion else 0
         self.__path = path
         self.__url = url
         self.__extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
@@ -28,7 +28,7 @@ class Spider:
         return f"r: {self.__recursion}\ndepth: {self.__depth}\npath: {self.__path}\nurl: {self.__url}"
    
 
-    def __download_images(self, soup: bs4.BeautifulSoup, link: str) -> None:
+    def __download_images(self, soup: BeautifulSoup, link: str) -> None:
         """download images from html source with 'img' balise
         download it to the self.__path given to the program or default './data/'"""
         for i in soup.find_all('img'):
@@ -38,12 +38,12 @@ class Spider:
                 url = urljoin(link, i['src'])
                 img_data = requests.get(url).content
                 name = os.path.basename(urlparse(url).path)
-                print(f"file {name} downloaded")
+                #print(f"file {name} downloaded")
                 with open(self.__path + name, 'wb') as handler:
                     handler.write(img_data)
 
 
-    def __find_links(self, soup: bs4.BeautifulSoup, link: str, depth: int) -> list[tuple(str, int)]:
+    def __find_links(self, soup: BeautifulSoup, link: str, depth: int) -> list[tuple(str, int)]:
         """find links with "a" balise and href, return a list of tuple (link, depth level)
         no duplicate and do not include the starting link"""
         result = []
@@ -65,19 +65,20 @@ class Spider:
         to_visit = [(self.__url, actual_depth)]
         while to_visit:
             actual = to_visit.pop(0)
+            visited.append(actual)
             print(actual)
             new_links = self.simple(actual[0], actual[1])
             #surement a exporter dans une fonction pour les check
             #surement a modifier pour un truc plus rapide a voir
             #ca me coutera moins cher de faire une liste a part que j'augmente au fur et mesire
-            #aussi un truc a voir c'est qu'il peut y avoir des liens pas lie il y a pas de checkdessus a faire surement avec urlparse soit ici soit dans simple
-            #un des exemples c'est https://www.scrapethissite.com/ sur un -r -l 3
             for i in new_links:
                 if i[1] >= self.__depth:
                     continue
                 if i in [x[0] for x in visited]:
                     continue
                 if i in [x[0] for x in to_visit]:
+                    continue
+                if urlparse(i[0]).hostname !=  urlparse(self.__url).hostname:
                     continue
                 to_visit.append(i)
 
@@ -90,7 +91,7 @@ class Spider:
         return a list of links for further depth level"""
         html = requests.get(link)
         soup = BeautifulSoup(html.content, 'html.parser')
-        #self.__download_images(soup, link) # temporairement mis en comm
+        #self.__download_images(soup, link)  # temporairement en commentaire
         return self.__find_links(soup, link, depth + 1)
 
 
