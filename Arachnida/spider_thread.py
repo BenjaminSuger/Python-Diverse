@@ -48,7 +48,7 @@ class Spider:
                 pass
 
 
-    def __find_links(self, soup: BeautifulSoup, link: str, depth: int) -> list[tuple]:
+    def __find_links(self, soup: BeautifulSoup, link: str) -> list[tuple]:
         """find links with "a" balise and href, return a list of tuple (link, depth level)
         no duplicate and do not include the starting link"""
         result = []
@@ -59,20 +59,34 @@ class Spider:
             url, _ = urldefrag(urljoin(link, href))
             if url == link:
                 continue
-            if not (url, depth) in result:
-                result.append((url, depth))
+            if not url in result:
+                result.append(url)
         return result
 
 
     def crawl(self) -> None:
         """crawl with the right level of depth use threads"""
         actual_depth = 0
-        visited = set() # changer pour un set
-        to_visit = [(self.__url, actual_depth)]
+        visited = set()
+        visited.add(self.__url)
+        to_visit = [self.__url]
+        # a portir d'ici ca va changer de la version de base 
+        with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
+            while to_visit:
+                result = list(executor.map(self.simple, to_visit))
+                print(result[0])
+                print(type(result[0]))
+                visited.update(result[0])
+                #la les check pour ajout a to_visit
+                to_visit = [] 
+
+
+
+
+        '''
         while to_visit:
             actual = to_visit.pop(0)
             visited.add(actual)
-            print(actual)
             new_links = self.simple(actual[0], actual[1])
             for i in new_links:
                 if i[1] >= self.__depth:
@@ -84,9 +98,9 @@ class Spider:
                 if urlparse(i[0]).hostname !=  urlparse(self.__url).hostname:
                     continue
                 to_visit.append(i)
+        '''
 
-
-    def simple(self, link: str, depth: int) -> list[tuple]:
+    def simple(self, link: str) -> list[tuple]:
         """get the images in the following format ;
         .jpg/ .jpeg /  .png / .gif / .bmp
         return a list of links for further depth level"""
@@ -96,7 +110,7 @@ class Spider:
             return []
         soup = BeautifulSoup(html.content, 'html.parser')
         self.__download_images(soup, link)
-        return self.__find_links(soup, link, depth + 1)
+        return self.__find_links(soup, link)
 
 
     def hunt(self) -> None:
