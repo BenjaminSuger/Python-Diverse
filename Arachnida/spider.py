@@ -1,4 +1,4 @@
-#!/bin/python3
+#!/usr/bin/env python3
 
 import argparse
 import os
@@ -19,6 +19,8 @@ class Spider:
     def __init__(self, url: str, recursion: bool = False, depth: int = 5, path: str = "."):
         self.__recursion = recursion
         self.__depth = depth if recursion else 0
+        if self.__depth <= 0:
+            raise Exception("Depth need to be positive and superior to 0")
         self.__path = path
         self.__url = url
         self.__extensions = ['.jpg', '.jpeg', '.png', '.gif', '.bmp']
@@ -32,18 +34,20 @@ class Spider:
         """download images from html source with 'img' balise
         download it to the self.__path given to the program or default './data/'"""
         for i in soup.find_all('img'):
-            path = urlparse(i['src']).path
-            ext = os.path.splitext(path)[1].lower()
-            if ext in self.__extensions:
-                url = urljoin(link, i['src'])
-                img_data = requests.get(url).content
-                name = os.path.basename(urlparse(url).path)
-                #print(f"file {name} downloaded")
-                with open(self.__path + name, 'wb') as handler:
-                    handler.write(img_data)
+            try:
+                path = urlparse(i['src']).path
+                ext = os.path.splitext(path)[1].lower()
+                if ext in self.__extensions:
+                    url = urljoin(link, i['src'])
+                    img_data = requests.get(url, timeout=10).content
+                    name = os.path.basename(urlparse(url).path)
+                    with open(os.path.join(self.__path, name), 'wb') as handler:
+                        handler.write(img_data)
+            except Exception:
+                pass
 
 
-    def __find_links(self, soup: BeautifulSoup, link: str, depth: int) -> list[tuple(str, int)]:
+    def __find_links(self, soup: BeautifulSoup, link: str, depth: int) -> list[tuple]:
         """find links with "a" balise and href, return a list of tuple (link, depth level)
         no duplicate and do not include the starting link"""
         result = []
@@ -58,6 +62,7 @@ class Spider:
                 result.append((url, depth))
         return result
 
+
     def crawl(self) -> None:
         """crawl with the right level of depth"""
         actual_depth = 0
@@ -68,30 +73,28 @@ class Spider:
             visited.append(actual)
             print(actual)
             new_links = self.simple(actual[0], actual[1])
-            #surement a exporter dans une fonction pour les check
-            #surement a modifier pour un truc plus rapide a voir
-            #ca me coutera moins cher de faire une liste a part que j'augmente au fur et mesire
             for i in new_links:
                 if i[1] >= self.__depth:
                     continue
-                if i in [x[0] for x in visited]:
+                if i[0] in [x[0] for x in visited]:
                     continue
-                if i in [x[0] for x in to_visit]:
+                if i[0] in [x[0] for x in to_visit]:
                     continue
                 if urlparse(i[0]).hostname !=  urlparse(self.__url).hostname:
                     continue
                 to_visit.append(i)
 
 
-
-
-    def simple(self, link: str, depth: int) -> list[str]:
+    def simple(self, link: str, depth: int) -> list[tuple]:
         """get the images in the following format ;
         .jpg/ .jpeg /  .png / .gif / .bmp
         return a list of links for further depth level"""
-        html = requests.get(link)
+        try:
+            html = requests.get(link, timeout = 5)
+        except Exception:
+            return []
         soup = BeautifulSoup(html.content, 'html.parser')
-        #self.__download_images(soup, link)  # temporairement en commentaire
+        self.__download_images(soup, link)
         return self.__find_links(soup, link, depth + 1)
 
 
@@ -104,10 +107,6 @@ class Spider:
             print("Spider killed")
             return
         self.crawl()
-
-
-
-
 
 
 def parsing_args() -> Spider:
