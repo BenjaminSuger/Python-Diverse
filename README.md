@@ -14,6 +14,10 @@ This is the original python piscine (=series of exercises) at 42. Soon to be dep
 From a cybersecurity project; a program allowing to downloads the following images format ; '.jpg/jpeg /  .png / .gif / .bmp'
 Can be use to download recursively downloads the images from the URL given
 
+Arachnida => was just a mandatory part of a 42 project
+Arachnida_threads => illustrate the use of threads
+
+
 ### Random
 
 Random exercice I found online (absolutly not related to 42 ;):    

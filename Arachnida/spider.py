@@ -66,11 +66,11 @@ class Spider:
     def crawl(self) -> None:
         """crawl with the right level of depth"""
         actual_depth = 0
-        visited = [] 
+        visited = set() 
         to_visit = [(self.__url, actual_depth)]
         while to_visit:
             actual = to_visit.pop(0)
-            visited.append(actual)
+            visited.add(actual)
             print(actual)
             new_links = self.simple(actual[0], actual[1])
             for i in new_links:
