@@ -69,37 +69,27 @@ class Spider:
         actual_depth = 0
         visited = set()
         visited.add(self.__url)
-        to_visit = [self.__url]
-        # a portir d'ici ca va changer de la version de base 
+        to_visit = [self.__url] #surement a changer dans une autre ds
         with concurrent.futures.ThreadPoolExecutor(max_workers=32) as executor:
             while to_visit:
-                result = list(executor.map(self.simple, to_visit))
-                print(result[0])
-                print(type(result[0]))
-                visited.update(result[0]) #donc ca faut que je boucle dedans pour que ca marche comme il faut
-                #la les check pour ajout a to_visit
-                to_visit = [] # un peu brute 
-                # faut que je check bien la depth peut etre avec un genre de break ou autre
+                output = list(executor.map(self.simple, to_visit))
+                result = []
+                for i in output:
+                    result.extend(i)
+                visited.update(to_visit)     
+                to_visit.clear()
+                actual_depth += 1
+                if actual_depth >= self.__depth:
+                    break
+                for i in result:
+                    if i in visited:
+                        continue
+                    if i in to_visit:
+                        continue
+                    if urlparse(i).hostname != urlparse(self.__url).hostname:
+                        continue
+                    to_visit.append(i)
 
-
-
-
-        '''
-        while to_visit:
-            actual = to_visit.pop(0)
-            visited.add(actual)
-            new_links = self.simple(actual[0], actual[1])
-            for i in new_links:
-                if i[1] >= self.__depth:
-                    continue
-                if i[0] in [x[0] for x in visited]:
-                    continue
-                if i[0] in [x[0] for x in to_visit]:
-                    continue
-                if urlparse(i[0]).hostname !=  urlparse(self.__url).hostname:
-                    continue
-                to_visit.append(i)
-        '''
 
     def simple(self, link: str) -> list[tuple]:
         """get the images in the following format ;
@@ -107,6 +97,7 @@ class Spider:
         return a list of links for further depth level"""
         try:
             html = requests.get(link, timeout = 5)
+            print(link)
         except Exception:
             return []
         soup = BeautifulSoup(html.content, 'html.parser')
