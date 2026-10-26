@@ -20,7 +20,7 @@ class Spider:
     def __init__(self, url: str, recursion: bool = False, depth: int = 5, path: str = "."):
         self.__recursion = recursion
         self.__depth = depth if recursion else 0
-        if self.__depth <= 0:
+        if self.__depth < 0:
             raise Exception("Depth need to be positive and superior to 0")
         self.__path = path
         self.__url = url
@@ -76,9 +76,10 @@ class Spider:
                 result = list(executor.map(self.simple, to_visit))
                 print(result[0])
                 print(type(result[0]))
-                visited.update(result[0])
+                visited.update(result[0]) #donc ca faut que je boucle dedans pour que ca marche comme il faut
                 #la les check pour ajout a to_visit
-                to_visit = [] 
+                to_visit = [] # un peu brute 
+                # faut que je check bien la depth peut etre avec un genre de break ou autre
 
 
 

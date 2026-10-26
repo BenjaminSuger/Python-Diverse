@@ -19,7 +19,7 @@ class Spider:
     def __init__(self, url: str, recursion: bool = False, depth: int = 5, path: str = "."):
         self.__recursion = recursion
         self.__depth = depth if recursion else 0
-        if self.__depth <= 0:
+        if self.__depth < 0:
             raise Exception("Depth need to be positive and superior to 0")
         self.__path = path
         self.__url = url
