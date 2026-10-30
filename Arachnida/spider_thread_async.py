@@ -3,6 +3,7 @@
 import argparse
 import os
 import requests
+import httpx
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin, urldefrag
 import concurrent.futures
@@ -81,7 +82,7 @@ class Spider:
                 for i in output:
                     result.extend(i[0])
                     to_download.update(i[1])
-                visited.update(to_visit)     
+                visited.update(to_visit)
                 to_visit.clear()
                 actual_depth += 1
                 if actual_depth >= self.__depth:
@@ -97,6 +98,9 @@ class Spider:
         print("-----")
         for i in to_download:
             print(i)
+        #ici peut etre faire un async pour deja maitrise en premier lieu 
+        #c'est une fonction qui va dl en async
+        
 
 
     def simple(self, link: str) -> list:
@@ -105,7 +109,7 @@ class Spider:
         return a list of links for further depth level"""
         try:
             html = requests.get(link, timeout = 5)
-            print(link)
+            #print(link)
         except Exception:
             return []
         soup = BeautifulSoup(html.content, 'html.parser')
