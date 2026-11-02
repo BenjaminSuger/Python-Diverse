@@ -4,6 +4,7 @@ import argparse
 import os
 import requests
 import httpx
+import asyncio
 from bs4 import BeautifulSoup
 from urllib.parse import urlparse, urljoin, urldefrag
 import concurrent.futures
@@ -95,12 +96,28 @@ class Spider:
                     if urlparse(i).hostname != urlparse(self.__url).hostname:
                         continue
                     to_visit.append(i)
-        print("-----")
-        for i in to_download:
-            print(i)
-        #ici peut etre faire un async pour deja maitrise en premier lieu 
-        #c'est une fonction qui va dl en async
-        
+            print("-------\nWe found all the links, we are now downloading the images")
+        asyncio.run(self.__download_all(to_download))
+        print(f"All images are download in {self.__path}")
+
+
+    async def __asyncio_download(self, client: httpx.AsyncClient, link: str) -> None:
+        name = os.path.basename(urlparse(link).path)
+        try:
+            response = await client.get(link)
+            response.raise_for_status()
+        except Exception as e: 
+            print(f"{type(e).__name__}: {link}") 
+            return
+        with open(os.path.join(self.__path, name), 'wb') as handler:
+            handler.write(response.content)
+
+
+    async def __download_all(self, links: set[str]) -> None:
+        async with httpx.AsyncClient( limits=httpx.Limits(max_connections=32), timeout=httpx.Timeout(10, pool=None) ) as client:
+            tasks = [self.__asyncio_download(client, link) for link in links]
+            await asyncio.gather(*tasks)
+
 
 
     def simple(self, link: str) -> list:
@@ -108,8 +125,8 @@ class Spider:
         .jpg/ .jpeg /  .png / .gif / .bmp
         return a list of links for further depth level"""
         try:
-            html = requests.get(link, timeout = 5)
-            #print(link)
+            html = requests.get(link, timeout = 5) # a terme a surement changer pour du async aussi
+            print(link)
         except Exception:
             return []
         soup = BeautifulSoup(html.content, 'html.parser')
