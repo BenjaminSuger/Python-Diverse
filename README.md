@@ -2,32 +2,34 @@
 
 ![python](assets/python_image.jpg)
 
-This repo is going to be composed of different small projects in Python 3.    
+This repo is composed of various small projects in Python 3.    
 
 ### Python_Modules   
-This project is a "piscine" (= series of exercises split in different modules with an increasing difficulty, and new concepts every module and exercise) to explore Python as much as possible.
+This project is a "piscine" (= a series of exercises split into different modules of increasing difficulty, with new concepts in every module and exercise) to explore Python as much as possible.
 
 ### Python_Piscine
-This is the original python piscine (=series of exercises) at 42. Soon to be depreciated. The aim of the modules where to introduce basic language features of python for data science / AI projects in the future.
+This is the original Python piscine (= series of exercises) at 42. Soon to be deprecated. The aim of the modules was to introduce the basic language features of Python for future data science / AI projects.
 
 ### Arachnida
-From a cybersecurity project; a program allowing to downloads the following images format ; '.jpg/jpeg /  .png / .gif / .bmp'
-Can be use to download recursively downloads the images from the URL given
+From a cybersecurity project: a program that downloads images in the following formats: '.jpg/jpeg / .png / .gif / .bmp'.
+It can be used to recursively download the images from a given URL.
 
-Arachnida => was just a mandatory part of a 42 project
-Arachnida_threads => illustrate the use of threads
+Arachnida => just the mandatory part of a 42 project
+Arachnida_threads => illustrates the use of threads
+Arachnida_threads_async => uses threads as before, but does not download at the same time.
 
+The last version is the most performant, mainly due to a better downloading strategy using async / httpx.
 
 ### Random
 
-Random exercice I found online (absolutly not related to 42 ;):    
-* caesar_breaker => print all variations of caesar decipher (used for another project in cybersecurity at 42)
-* gnome_sort => apply a sort of gnome_sort on a list of strings
-* nesting_parenthesis => common stack use through list to solve nesting parenthesis
-* palindrome_basic => basic palindrome like
-* shared_letters => should print in order and only once the shared letter from 2 str
-* mirrors => mirrors of a list
-* secret => find if the character of the first string are present in order in the second string 
-* letter_stew => find if two strings get the same letter (different orders)
-* staircase => count every step of 1
-* convert_base => convert a string representation from a base to another
+Random exercises I found online (absolutely not related to 42 ;):    
+* caesar_breaker => prints all variations of the Caesar decipher (used for another cybersecurity project at 42)
+* gnome_sort => applies a kind of gnome sort to a list of strings
+* nesting_parenthesis => common use of a stack (through a list) to solve nested parentheses
+* palindrome_basic => basic palindrome check
+* shared_letters => prints, in order and only once, the letters shared by 2 strings
+* mirrors => mirrors a list
+* secret => finds whether the characters of the first string are present, in order, in the second string
+* letter_stew => finds whether two strings have the same letters (in a different order)
+* staircase => counts every step of 1
+* convert_base => converts a string representation from one base to another
