@@ -20,6 +20,9 @@ Arachnida_threads_async => uses threads as before, but does not download at the 
 
 The last version is the most performant, mainly due to a better downloading strategy using async / httpx.
 
+### Scorpion
+Extract EXIF information from an image.
+
 ### Random
 
 Random exercises I found online (absolutely not related to 42 ;):    
