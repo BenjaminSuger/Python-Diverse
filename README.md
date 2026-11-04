@@ -23,6 +23,9 @@ The last version is the most performant, mainly due to a better downloading stra
 ### Scorpion
 Extract EXIF information from an image.
 
+### TOTP
+Implementation of TOTP (Time-based One-Time Password) following the RFC 6238
+
 ### Random
 
 Random exercises I found online (absolutely not related to 42 ;):    
