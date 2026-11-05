@@ -4,6 +4,8 @@ import argparse
 import os
 import hashlib
 from cryptography.hazmat.primitives.ciphers.aead import AESGCM
+import time
+
 
 def parser():
     """parse the arguments of the program"""
@@ -20,9 +22,9 @@ def parser():
     return values
 
 
-def is_valid_hex(content: str) -> bool:#surment un truc a faire gaffe avec upper() lower()
+def is_valid_hex(content: str) -> bool:
     """check hexadecimal did not find something i like"""
-    hexadecimal = "0123456789abcdef"
+    hexadecimal = "0123456789abcdefABCDEF"
     for i in content:
         if i not in hexadecimal:
             return False
@@ -34,38 +36,60 @@ def is_valid_hex(content: str) -> bool:#surment un truc a faire gaffe avec upper
 def generate_key(file: string) -> None:
     """generate ft_otp.key with AES256"""
     try:
-        fd = open(file)#la je crois je dois mettre des options
+        fd = open(file, "r")
+        content = fd.read()
+        if not content:
+            print("./ft_otp: error: no content in the file")
+            exit()
+        if not is_valid_hex(content):
+            print("./ft_otp: error: key must be 64 hexadecimal characters.")
+            exit()
+        raw_key = os.getlogin()
+        secret = bytes.fromhex(content)
+        salt = os.urandom(16)
+        nonce = os.urandom(12)
+        key = hashlib.pbkdf2_hmac("sha256", raw_key.encode(), salt, 600_000, dklen=32)
+        data = salt + nonce + AESGCM(key).encrypt(nonce, secret, None)
+        open("ft_otp.key", "wb").write(data)
     except Exception as e:
         print(f"{type(e).__name__}: {e}")
         return
-    content = fd.read()
-    if not content:
-        print("./ft_otp: error: no content in the file")
-        exit()
-    if not is_valid_hex(content):
-        print("./ft_otp: error: key must be 64 hexadecimal characters.")
-        exit()
-    raw_key = os.getlogin()
-    secret = bytes.fromhex(content)
-    salt = os.urandom(16)
-    nonce = os.urandom(12)
-    key = hashlib.pbkdf2_hmac("sha256", raw_key.encode(), salt, 600_000, dklen=32)
-    data = salt + nonce + AESGCM(key).encrypt(nonce, secret, None)
-    open("ft_otp.key", "wb").write(data)
+
+
+def hmac_sha1(key: bytes, msg: bytes) -> bytes:
+    """generation of the hmac sha1 necessary for hotp"""
+    if len(key) > 64: 
+        key = hashlib.sha1(key).digest()
+    if len(key) < 64:
+        key = key.ljust(64, b'\0')
+    o_key_pad = bytes(i ^ 0x5c for i in key)
+    i_key_pad = bytes(i ^ 0x36 for i in key)
+    return hashlib.sha1(o_key_pad + hashlib.sha1(i_key_pad + msg).digest()).digest()
+
+
+def hotp(key: bytes, ctr: int, length: int) -> str:
+    """helper function to generate HOTP with the settings for TOTP"""
+    mac = hmac_sha1(key=key, msg=ctr.to_bytes(8, 'big'))
+    offset = mac[-1] & 0xf
+    truncated = bytearray(mac[offset:offset+4])
+    truncated[0] &= 0x7f
+    value = int.from_bytes(truncated, 'big') % (10**length)
+    return str(value).rjust(length, '0')
 
 
 def generate_totp(file: string) -> None:
     """read ft_otp.key and generate a TOTP"""
     try:
         fd = open(file, "rb")
+        data  = fd.read()
+        salt, nonce, ct = data[:16], data[16:28], data[28:]
+        key   = hashlib.pbkdf2_hmac("sha256", os.getlogin().encode(), salt, 600_000, dklen=32)
+        secret = AESGCM(key).decrypt(nonce, ct, None)
+        ctr = int(time.time()) // 30 
+        print( hotp(secret, ctr, 6))
     except Exception as e:
         print(f"{type(e).__name__} : {e}")
         exit()
-    data  = fd.read()
-    salt, nonce, ct = data[:16], data[16:28], data[28:]
-    key   = hashlib.pbkdf2_hmac("sha256", os.getlogin().encode(), salt, 600_000, dklen=32)
-    secret = AESGCM(key).decrypt(nonce, ct, None)
-    print(str(secret))
 
 
 def totp() -> None:
