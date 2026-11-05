@@ -26,6 +26,14 @@ Extract EXIF information from an image.
 ### TOTP
 Implementation of TOTP (Time-based One-Time Password) following the RFC 6238
 
+```sh
+echo -n "" > test.txt
+./totp.py -g test.txt
+./totp.py -k ft_otp.key
+oathtool --totp $(cat test.txt)
+```
+You need use the -k and oathtool in the same 30 seconds window to be sure to have the same output
+
 ### Random
 
 Random exercises I found online (absolutely not related to 42 ;):    
